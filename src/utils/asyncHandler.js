@@ -1,13 +1,10 @@
-
 // wrapper func with promises 
 const asyncHandler = (requestHandler) =>{
-    (req,res,next) => {
+    return (req,res,next) => {
         Promise.resolve(requestHandler(req,res,next))
         .catch((error) => next(error))
     }
 }
-
-
 /*
 // wrapper func with try catch
 const asyncHandler = (fn) => async (req,res,next) => {
@@ -21,6 +18,4 @@ const asyncHandler = (fn) => async (req,res,next) => {
     }
 }
 */
-
-
 export {asyncHandler}

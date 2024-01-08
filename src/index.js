@@ -1,14 +1,13 @@
 import dotenv from "dotenv"
 //require('dotenv').config({path:"./.env"})
-
 import mongoose from "mongoose";
 import { DB_NAME } from "./constant.js";
 import connectDB from "./database/index.js";
+import {app} from "./app.js";
 
 dotenv.config({
     path:'/.env',
 })
-
 connectDB()
 .then(() => {
     app.listen(process.env.PORT || 8000 , ()=>{
@@ -16,17 +15,9 @@ connectDB()
     });
 
 })
-.catch(error)(() =>{
-    console.log("MONGODB Connection failed !!!",error)
+.catch ((error) => {
+    console.log("MONGODB Connection failed !!!",error);
 })
-
-
-
-
-
-
-
-
 
 
 
