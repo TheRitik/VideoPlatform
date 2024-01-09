@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken"
 
 
 
-const userSchema = (
+const userSchema =new Schema (
     {
         username:{
             type : String,
@@ -31,7 +31,7 @@ const userSchema = (
             type : String,     //cloudinary URL
             required : true,
         },
-        coverpage:{
+        coverImage:{
             type : String,    // cloudinary URL
         },
         watchhistory:{
@@ -49,12 +49,11 @@ const userSchema = (
     {timestamps:true}    
 )
 
-userSchema.pre("Save", async function (next) { 
-    if(!(this.isModified("password"))) return next();
-    this.password = bcrypt.hash(this.password,10)
+userSchema.pre("save", async function (next) {
+    if(!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 10)
     next()
-  })
-
+})
 userSchema.methods.isPasswordCorrect = async function (password){
     return await bcrypt.compare(password,this.password)
 }
@@ -78,9 +77,6 @@ userSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {
             _id : this._id,
-            email : this.email,
-            username : this.username,
-            fullname : this.fullname,
         },
         process.env.REFRESH_TOKEN_SECRET,
         {
